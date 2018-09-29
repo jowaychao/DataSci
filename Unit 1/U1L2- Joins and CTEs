@@ -1,0 +1,66 @@
+1.
+WITH rain
+AS (
+	SELECT Events, ZIP
+	FROM weather
+	WHERE Events='Rain'
+)
+SELECT t.trip_id Trip_ID, r.ZIP ZipCode, r.Events, t.duration Duration
+FROM rain r
+JOIN trips t
+ON t.zip_code=r.ZIP
+GROUP BY t.trip_id
+ORDER BY duration DESC
+LIMIT 3
+
+
+
+
+
+2.
+SELECT status.station_id, stations.city, COUNT(*) empty
+FROM status
+JOIN stations
+ON stations.station_id=status.station_id
+GROUP BY status.station_id
+ORDER BY empty DESC 
+LIMIT 1
+
+
+
+
+
+3.
+SELECT trips.start_station, stations.dockcount, COUNT(*)
+FROM trips
+LEFT JOIN stations
+ON trips.start_station=stations.name
+GROUP BY trips.start_station
+ORDER BY stations.dockcount DESC 
+
+
+
+
+
+4.
+WITH rainy
+AS (
+	SELECT DATE(weather.date) weather_date
+	FROM weather
+	WHERE weather.Events='Rain'
+	ORDER BY weather_date
+),
+rainy_trips
+AS (
+	SELECT trips.trip_id tripid, DATE(trips.start_date) trip_date, duration
+	FROM trips
+	JOIN rainy
+	ON rainy.weather_date=trip_date
+	ORDER BY duration DESC 
+)
+SELECT rainy_trips.tripid, rainy_trips.trip_date, MAX(duration) max_duration
+FROM rainy_trips
+GROUP BY rainy_trips.trip_date
+ORDER BY max_duration DESC
+
+
