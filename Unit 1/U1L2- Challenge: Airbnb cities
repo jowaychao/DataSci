@@ -1,0 +1,28 @@
+1)
+SELECT *
+FROM listings
+GROUP BY id
+ORDER BY price DESC 
+LIMIT 1
+
+This listing by Paul costs 9952NTD (~$300)/night with a minimum stay of 1 night. This listing is availible 92/365 days. This room is located near the A exit of the Taipei 101 MRT station. Paul also has 12 total listings. The exact location (lat:long) of his room is also listed.
+
+
+2)
+SELECT neighbourhood, COUNT(*) number_of_listings
+FROM listings
+GROUP BY neighbourhood
+ORDER BY number_of_listings DESC
+
+Gives total number of listings by neighborhood. To show popularity, we can count the number of reviews at each listing and match it with the neighborhood the listing is in.
+
+3)
+SELECT listings.neighbourhood, COUNT(*) numreviews
+FROM reviews
+JOIN listings
+ON listings.id=reviews.listing_id
+GROUP BY listings.neighbourhood
+ORDER BY numreviews DESC
+
+
+
